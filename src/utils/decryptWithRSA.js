@@ -1,6 +1,7 @@
 import forge from 'node-forge';
 
 export const decryptWithRSA = (privateKey, encryptedText) => {
+    console.log("privateKey", privateKey)
     const rsa = forge.pki.privateKeyFromPem(privateKey);
 
     // Convert the base64-encoded encrypted text back to bytes
