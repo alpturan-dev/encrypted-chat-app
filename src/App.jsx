@@ -27,6 +27,8 @@ function ChatApp() {
   if (!isAuth) {
     return (
       <AppWrapper
+        room={room}
+        setRoom={setRoom}
         isAuth={isAuth}
         setIsAuth={setIsAuth}
         setIsInChat={setIsInChat}
@@ -36,27 +38,8 @@ function ChatApp() {
     );
   }
 
-  // const deleteKeys = async () => {
-  //   const queryKeys = query(
-  //     keysRef,
-  //     where("room", "==", "sefa"),
-  //   );
-  //   const deleteKeysFromFirebase = onSnapshot(queryKeys, (snapshot) => {
-  //     snapshot.forEach(async (doc) => {
-  //       await deleteDoc(doc.ref)
-  //     });
-  //     deleteKeysFromFirebase()
-  //   });
-  // }
-
-  // if (!isInChat) {
-  //   console.log("isInChat")
-  //   sessionStorage.clear()
-  //   deleteKeys();
-  // }
-
   return (
-    <AppWrapper isAuth={isAuth} setIsAuth={setIsAuth} setIsInChat={setIsInChat}>
+    <AppWrapper isAuth={isAuth} setIsAuth={setIsAuth} setIsInChat={setIsInChat} room={room} setRoom={setRoom}>
       {!isInChat ? (
         <div className="room">
           <label> Type room name: </label>

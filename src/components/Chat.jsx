@@ -9,6 +9,7 @@ import {
   query,
   getDocs,
   orderBy,
+  limit,
 } from "firebase/firestore";
 import { keyGenerator } from '../utils/keyGenerator'
 import { encryptWithRSA } from '../utils/encryptWithRSA'
@@ -37,11 +38,15 @@ export const Chat = ({ room }) => {
       where("room", "==", room),
       where("user", "!=", auth.currentUser.displayName)
     );
-    const querySnapshot = await getDocs(queryKeys);
-    querySnapshot.forEach((doc) => {
-      setReceiverPublicKey(doc.data().publicKey)
-      // console.log(doc.id, " => ", doc.data().publicKey);
-    });
+    try {
+      const querySnapshot = await getDocs(queryKeys);
+      querySnapshot.forEach((doc) => {
+        setReceiverPublicKey(doc.data().publicKey)
+        console.log(doc.id, " => ", doc.data().publicKey);
+      });
+    } catch (e) {
+      console.log(e.message)
+    }
   }
 
   useEffect(() => {
@@ -52,16 +57,18 @@ export const Chat = ({ room }) => {
     const queryMessages = query(
       messagesRef,
       where("room", "==", room),
-      orderBy("createdAt")
+      orderBy("createdAt", 'desc'),
+      limit(1)
     );
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
       snapshot.forEach((doc) => {
         messages.push({ ...doc.data(), id: doc.id });
       });
-      const privateKey = JSON.parse(sessionStorage.getItem('keys')).privateKey;
+      const keys = JSON.parse(sessionStorage.getItem('keys'));
+      const privateKey = keys.privateKey
       messages.map((message) => {
-        const decryptedText = decryptWithRSA(privateKey, message);
+        const decryptedText = decryptWithRSA(privateKey, message.text);
         console.log("decryptedText", decryptedText)
       })
       setMessages(messages);
@@ -72,7 +79,7 @@ export const Chat = ({ room }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    getKeys()
+    const publicKey = await getKeys()
     if (newMessage === "") return;
     const encryptedText = encryptWithRSA(receiverPublicKey, newMessage)
     await addDoc(messagesRef, {
@@ -91,9 +98,10 @@ export const Chat = ({ room }) => {
         <h1>Welcome to: {room.toUpperCase()}</h1>
       </div>
       <div className="messages">
-        {/* {messages.map((message) => {
-          const privateKey = JSON.parse(sessionStorage.getItem('keys')).privateKey;
-          const decryptedText = decryptWithRSA(privateKey, message);
+        {messages.map((message) => {
+          const keys = JSON.parse(sessionStorage.getItem('keys'));
+          const privateKey = keys?.privateKey;
+          const decryptedText = decryptWithRSA(privateKey, message.text);
           return (
             (
               <div key={message.id} className="message">
@@ -101,7 +109,7 @@ export const Chat = ({ room }) => {
               </div>
             )
           )
-        })} */}
+        })}
       </div>
       <form onSubmit={handleSubmit} className="new-message-form">
         <input

@@ -17,8 +17,8 @@ export const keyGenerator = () => {
     var keypair = rsa.generateKeyPair({ bits: 2048, e: 0x10001 });
     var publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
     var privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
-    console.log(publicKeyPem);
-    console.log(privateKeyPem);
+    // console.log(publicKeyPem);
+    // console.log(privateKeyPem);
     const keys = { publicKey: publicKeyPem, privateKey: privateKeyPem };
     return keys;
 }

@@ -14,13 +14,14 @@ import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-export const AppWrapper = ({ children, isAuth, setIsAuth, setIsInChat }) => {
+export const AppWrapper = ({ children, isAuth, setIsAuth, setIsInChat, room, setRoom }) => {
   const keysRef = collection(db, "anahtar");
+  console.log("room", room)
 
   const deleteKeys = async () => {
     const queryKeys = query(
       keysRef,
-      where("room", "==", "sefa"),
+      where("room", "==", room),
     );
     const deleteKeysFromFirebase = onSnapshot(queryKeys, (snapshot) => {
       snapshot.forEach(async (doc) => {
@@ -28,6 +29,7 @@ export const AppWrapper = ({ children, isAuth, setIsAuth, setIsInChat }) => {
       });
       deleteKeysFromFirebase()
     });
+    // setRoom("")
   }
 
   const signUserOut = async () => {
