@@ -16,9 +16,9 @@ export const Auth = ({ setIsAuth }) => {
     }
   };
   return (
-    <div className="auth">
-      <p> Sign In With Google To Continue </p>
-      <button onClick={signInWithGoogle}> Sign In With Google </button>
+    <div style={{ backgroundColor: "transparent" }}>
+      <p style={{ color: "white" }}> Sign In With Google To Continue </p>
+      <button onClick={signInWithGoogle}> Sign In </button>
     </div>
   );
 };

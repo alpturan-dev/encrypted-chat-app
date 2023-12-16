@@ -39,7 +39,13 @@ function ChatApp() {
   }
 
   return (
-    <AppWrapper isAuth={isAuth} setIsAuth={setIsAuth} setIsInChat={setIsInChat} room={room} setRoom={setRoom}>
+    <AppWrapper
+      isAuth={isAuth}
+      setIsAuth={setIsAuth}
+      setIsInChat={setIsInChat}
+      room={room}
+      setRoom={setRoom}
+    >
       {!isInChat ? (
         <div className="room">
           <label> Type room name: </label>
