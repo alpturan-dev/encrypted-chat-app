@@ -11,8 +11,8 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import Cookies from "universal-cookie";
-import { MatrixRainingLetters } from "react-mdr";
 import MatrixRainComponent from "./MatrixRainComponent.jsx";
+import { Button } from "@mui/material";
 
 const cookies = new Cookies();
 
@@ -23,6 +23,7 @@ export const AppWrapper = ({
   setIsInChat,
   room,
   setRoom,
+  isInChat,
 }) => {
   const keysRef = collection(db, "anahtar");
   console.log("room", room);
@@ -52,7 +53,7 @@ export const AppWrapper = ({
       <div>
         <MatrixRainComponent />
       </div>
-      <div style={{ backgroundColor: "transparent" }}>
+      <div style={{ backgroundColor: isInChat ? "black" : "transparent" }}>
         <div style={{ backgroundColor: "transparent" }}>
           <h1>Welcome to Encrypted Chat App </h1>
         </div>
@@ -60,7 +61,15 @@ export const AppWrapper = ({
         <div>{children}</div>
         {isAuth && (
           <div>
-            <button onClick={signUserOut}> Sign Out</button>
+            <Button
+              variant="contained"
+              size="large"
+              color="error"
+              style={{ margin: 20 }}
+              onClick={signUserOut}
+            >
+              Sign Out
+            </Button>
           </div>
         )}
       </div>
