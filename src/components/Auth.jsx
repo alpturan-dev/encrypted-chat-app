@@ -2,6 +2,7 @@ import { auth, provider } from "../firebase-config.js";
 import { signInWithPopup } from "firebase/auth";
 import "../styles/Auth.css";
 import Cookies from "universal-cookie";
+import { Button } from "@mui/material";
 
 const cookies = new Cookies();
 
@@ -16,9 +17,16 @@ export const Auth = ({ setIsAuth }) => {
     }
   };
   return (
-    <div className="auth">
-      <p> Sign In With Google To Continue </p>
-      <button onClick={signInWithGoogle}> Sign In With Google </button>
+    <div style={{ backgroundColor: "transparent" }}>
+      <p style={{ color: "white" }}> Sign In With Google To Continue </p>
+      <Button
+        variant="contained"
+        size="large"
+        color="success"
+        onClick={signInWithGoogle}
+      >
+        Sign In
+      </Button>
     </div>
   );
 };
